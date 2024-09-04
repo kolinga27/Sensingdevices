@@ -1,0 +1,94 @@
+<MyGrid>:
+    orientation: 'vertical'
+
+    GridLayout:
+        cols: 2
+        size: root.width, root.height
+        
+        GridLayout:
+            cols: 2
+            
+            GridLayout:
+                rows: 2
+                TextInput:
+                    id: graph_name_input
+                    hint_text: 'Graph Name'
+                    multiline: False
+                
+                GridLayout:
+                    cols: 2
+                    Spinner:
+                        id: type_dropdown_spinner
+                        text: 'Type'
+                        values: ['Resistance', 'Voltage', 'Raw ADC Val', 'DHT11 Temperature', 'DHT11 Humidity']
+                        on_text: app.on_spinner_select(type_dropdown_spinner.text)
+                    
+                    TextInput:
+                        id: reference_input
+                        hint_text: 'N/A'
+                        multiline: False
+                        input_filter: 'int'
+                        readonly: True
+
+            Button:
+                text: 'Create Graph'
+                on_release: app.button_create_graph()
+
+            Button:
+                id: b1
+                text: 'DATALOG'
+                on_release: app.send_string_over_bluetooth(self.text)
+            
+            TextInput:
+                id: data_textbox
+                hint_text: 'Data Received:'
+                multiline: True
+                readonly: True
+
+            Button:
+                id: connect_bluetooth
+                text: 'Connect to ESP32'
+                on_release: app.connect()
+
+            TextInput:
+                id: BTconnection_textbox
+                hint_text: 'Bluetooth Not Connected'
+                multiline: True
+                readonly: True
+            
+            TextInput:
+                id: save_graph_config_name
+                hint_text: 'Save Name'
+                multiline: False
+
+            Button:
+                id: save_graph_config_button
+                text: 'Save configuration'
+                on_release: app.save_graph_config()
+            
+            TextInput:
+                id: load_graph_config_name
+                hint_text: 'Load Save Name'
+                multiline: False
+
+            Button:
+                id: load_graph_config_button
+                text: 'Load configuration'
+                on_release: app.load_graph_config()
+
+            Button:
+                id: reset_graphs
+                text: 'Reset Graphs'
+                on_release: app.reset_graphs()
+
+            ToggleButton:
+                id: toggle_autoupdate
+                text: 'Auto Update Graph'
+                on_state:
+                    if self.state == 'down': app.toggle_on_autoupdate()
+                    else: app.toggle_off_autoupdate()
+        ScrollView:
+            GridLayout:
+                cols: 2
+                id: graphs_container
+                padding: dp(10)
